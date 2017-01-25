@@ -17,7 +17,7 @@
 
 #include <os>
 #include <net/inet4>
-#include "tinycc/libtcc.h"
+#include "tcc.hpp"
 
 extern "C"
 void* dlopen(const char *filename, int flag)
@@ -55,9 +55,6 @@ void Service::start()
   // add own serial out after service start
   OS::add_stdout_default_serial();
 
-  //  server_id  = 2;
-  //  servername = "irc.other.org";
-
   // show that we are starting :)
   printf("*** " SERVICE_NAME " starting up...\n");
   //_enable_heap_debugging_verbose(1);
@@ -71,36 +68,33 @@ void Service::start()
       {  10, 0,  0,  1 }); // DNS
 
   /// TCC
-  int res;
-  auto* state = tcc_new();
-  printf("TCC state: %p\n", state);
-
-  res = tcc_set_output_type(state, TCC_OUTPUT_MEMORY);
-  printf("output res: %d\n", res);
-
-  tcc_add_symbol(state, "printf", (void*) printf);
-
-  res = tcc_compile_string(state, 
-  "int printf(const char*, ...);"
-  "int test(void) { "
-  "  printf(\"printf works too!!!!\n\");"
-  "  return 666;"
-  "}");
-  printf("compile res: %d\n", res);
+  TCC tcc;
+  tcc.add_sym("printf", (void*) printf);
   
-  int size = tcc_relocate(state, nullptr);
-  printf("reloc size: %d\n", size);
-  assert(size > 0);
+  try {
+    tcc.compile(R"HEYHEY(
+int printf(const char*, ...);
 
-  auto* pmem = new char[size];
-  res = tcc_relocate(state, pmem);
-  printf("reloc res: %d\n", res);
+void other_func(int param)
+{
+  printf("printf %d works too!!!!\n", param);
+}
 
-  typedef int (*testfunc_t)();
-  auto func = (testfunc_t) tcc_get_symbol(state, "test");
-  printf("get_symbol: %p\n", func);
-
-  printf("\n\n");
-  res = func();
-  printf("res = %d\n", res);
+int test(int param)
+{
+  other_func(param);
+  return 666;
+}
+    )HEYHEY",
+    [] (const char* msg) {
+      printf("\n\t%s\n", msg);
+    });
+    // call test
+    int res = tcc.call("test", 33);
+    printf("call() res: %d\n", res);
+  }
+  catch (std::runtime_error err)
+  {
+    printf("TCC: %s\n", err.what());
+  }
 }

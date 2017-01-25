@@ -17,7 +17,7 @@ set(MAX_MEM 100)
 
 # Source files to be linked with OS library parts to form bootable image
 set(SOURCES
-  service.cpp
+  service.cpp       tcc.cpp
   tinycc/tcc.c      tinycc/libtcc.c   tinycc/tccpp.c
   tinycc/tccgen.c   tinycc/tccelf.c   tinycc/tccasm.c
   tinycc/tccrun.c   tinycc/i386-gen.c tinycc/i386-asm.c
