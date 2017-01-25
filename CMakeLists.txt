@@ -1,16 +1,11 @@
 cmake_minimum_required(VERSION 2.8.9)
-project(tcc)
-
-# IncludeOS install location
+project(service)
 if (NOT DEFINED ENV{INCLUDEOS_PREFIX})
   set(ENV{INCLUDEOS_PREFIX} /usr/local)
 endif()
 
-# Human-readable name of your service
 set(SERVICE_NAME "TCC test")
-
-# Name of your service binary
-set(BINARY       "TCC")
+set(BINARY       "tccport")
 
 # Maximum memory can be hard-coded into the binary
 set(MAX_MEM 100)
@@ -23,12 +18,6 @@ set(SOURCES
   tinycc/tccrun.c   tinycc/i386-gen.c tinycc/i386-asm.c
   )
 add_definitions(-DTCC_TARGET_I386 -DCONFIG_TCCBOOT -DCONFIG_TCC_NO_RUNTIME)
-#
-# Service CMake options
-# (uncomment to enable)
-#
-
-# MISC:
 
 # To add your own include paths:
 set(LOCAL_INCLUDES "include")
@@ -36,21 +25,14 @@ set(LOCAL_INCLUDES "include")
 # Adding memdisk (expects my.disk to exist in current dir):
 #set(MEMDISK .)
 
-# DRIVERS / PLUGINS:
-
+# list of drivers:
 set(DRIVERS
   #virtionet   # Virtio networking
   silent_start
   #heap_debugging
   )
 
-set(PLUGINS
-  # syslogd    # Syslog over UDP
-  # ...others
-  )
-
-
-set(LIBRARIES ../../LiveUpdate/build/libliveupdate.a)
+set(PLUGINS)
 
 # include service build script
 include($ENV{INCLUDEOS_PREFIX}/includeos/service.cmake)
