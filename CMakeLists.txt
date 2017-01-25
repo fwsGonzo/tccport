@@ -39,7 +39,7 @@ set(LOCAL_INCLUDES "include")
 # DRIVERS / PLUGINS:
 
 set(DRIVERS
-  virtionet   # Virtio networking
+  #virtionet   # Virtio networking
   silent_start
   #heap_debugging
   )
