@@ -11,6 +11,8 @@ struct TCC
   void compile(const std::string& code, error_func_t);
   
   // add symbol that TCC code has access to
+  template <typename F>
+  bool  add_sym(const std::string& name, F func);
   bool  add_sym(const std::string& name, void*);
   // retrieve location of a TCC-side symbol
   void* get_sym(const std::string& name);
@@ -36,4 +38,10 @@ inline int TCC::call (const std::string& name, Args&&... args)
   if (!func) throw std::runtime_error("Symbol does not exist");
   
   return ((int(*)(...))func)(std::forward<Args>(args)...);
+}
+
+template <typename F>
+bool TCC::add_sym(const std::string& name, F func)
+{
+  return add_sym(name, (void*) func);
 }

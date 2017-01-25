@@ -27,7 +27,7 @@ void Service::start()
   printf("*** " SERVICE_NAME " starting up...\n");
 
   TCC tcc;
-  tcc.add_sym("printf", (void*) printf);
+  tcc.add_sym("printf", printf);
   
   try {
     // compile multiline string
@@ -61,5 +61,7 @@ void Service::start()
 
 int execvp(const char *file, char *const argv[])
 {
+  (void) argv;
   printf("execvp called: %s\n", file);
+  return -1;
 }
