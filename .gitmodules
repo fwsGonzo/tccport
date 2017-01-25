@@ -1,0 +1,4 @@
+
+[submodule "tinycc"]
+	path = tinycc
+	url = git@github.com:fwsGonzo/tinycc.git
