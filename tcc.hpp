@@ -1,4 +1,4 @@
-#include "tinycc/libtcc.h"
+#include "libtcc.h"
 #include <delegate>
 #include <stdexcept>
 #include <string>

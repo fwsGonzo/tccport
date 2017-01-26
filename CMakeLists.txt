@@ -8,22 +8,17 @@ set(SERVICE_NAME "TCC test")
 set(BINARY       "tccport")
 
 # Maximum memory can be hard-coded into the binary
-set(MAX_MEM 100)
+set(MAX_MEM 10)
 
 # Source files to be linked with OS library parts to form bootable image
 set(SOURCES
   service.cpp       tcc.cpp
-  tinycc/tcc.c      tinycc/libtcc.c   tinycc/tccpp.c
-  tinycc/tccgen.c   tinycc/tccelf.c   tinycc/tccasm.c
-  tinycc/tccrun.c   tinycc/i386-gen.c tinycc/i386-asm.c
   )
-add_definitions(-DTCC_TARGET_I386 -DCONFIG_TCCBOOT -DCONFIG_TCC_NO_RUNTIME)
 
 # To add your own include paths:
-set(LOCAL_INCLUDES "include")
+set(LOCAL_INCLUDES "libtcc")
 
-# Adding memdisk (expects my.disk to exist in current dir):
-#set(MEMDISK .)
+set(LIBRARIES ../libtcc/libtcc.a)
 
 # list of drivers:
 set(DRIVERS
