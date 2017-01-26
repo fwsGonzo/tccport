@@ -18,7 +18,7 @@ set(SOURCES
 # To add your own include paths:
 set(LOCAL_INCLUDES "libtcc")
 
-set(LIBRARIES ../libtcc/libtcc.a)
+set(LIBRARIES libtcc/libtcc.a)
 
 # list of drivers:
 set(DRIVERS
@@ -29,5 +29,10 @@ set(DRIVERS
 
 set(PLUGINS)
 
+
+
 # include service build script
 include($ENV{INCLUDEOS_PREFIX}/includeos/service.cmake)
+
+add_subdirectory(libtcc)
+target_link_libraries(service tcc)
